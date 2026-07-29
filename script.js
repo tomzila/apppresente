@@ -39,8 +39,26 @@ function showScreen(index) {
   updateParticlesForScreen(screens[index]);
 }
 
+let transitioning = false;
+
 function nextScreen() {
-  if (currentIndex < screens.length - 1) showScreen(currentIndex + 1);
+  if (transitioning || currentIndex >= screens.length - 1) return;
+  transitioning = true;
+  const current = screens[currentIndex];
+  const next = screens[currentIndex + 1];
+
+  current.classList.add("screen-leaving");
+  setTimeout(() => {
+    current.classList.remove("active", "screen-leaving");
+    next.classList.add("active", "screen-entering");
+    currentIndex++;
+    updateDots();
+    updateParticlesForScreen(next);
+    setTimeout(() => {
+      next.classList.remove("screen-entering");
+      transitioning = false;
+    }, 520);
+  }, 420);
 }
 
 document.querySelectorAll("[data-next]").forEach(btn => {
@@ -77,16 +95,18 @@ document.getElementById("gate-form").addEventListener("submit", e => {
   e.preventDefault();
   const input = document.getElementById("gate-input");
   const feedback = document.getElementById("gate-feedback");
-  const hint = document.getElementById("gate-hint");
+  const hintCard = document.getElementById("hint-card");
+  const hintText = document.getElementById("hint-text");
   if (normalizar(input.value) === normalizar(SENHA_CORRETA)) {
     feedback.textContent = "";
-    hint.textContent = "";
+    hintCard.classList.remove("visible");
     nextScreen();
   } else {
     tentativasErradas++;
     feedback.textContent = "não foi essa, tenta de novo :)";
     if (tentativasErradas >= 1) {
-      hint.textContent = DICA_SENHA;
+      hintText.textContent = DICA_SENHA;
+      hintCard.classList.add("visible");
     }
     input.focus();
   }
@@ -108,9 +128,20 @@ function renderMessage() {
 renderMessage();
 
 msgNextBtn.addEventListener("click", () => {
+  if (transitioning) return;
   if (msgIndex < MENSAGENS.length - 1) {
-    msgIndex++;
-    renderMessage();
+    transitioning = true;
+    msgTextEl.classList.add("msg-leaving");
+    setTimeout(() => {
+      msgIndex++;
+      renderMessage();
+      msgTextEl.classList.remove("msg-leaving");
+      msgTextEl.classList.add("msg-entering");
+      setTimeout(() => {
+        msgTextEl.classList.remove("msg-entering");
+        transitioning = false;
+      }, 550);
+    }, 420);
   } else {
     nextScreen();
   }

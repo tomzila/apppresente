@@ -24,6 +24,8 @@ html, body {
 body { min-height: 100vh; position: relative; }
 
 /* ---------- Telas ---------- */
+#app { perspective: 1400px; }
+
 .screen {
   display: none;
   min-height: 100vh;
@@ -32,13 +34,32 @@ body { min-height: 100vh; position: relative; }
   justify-content: center;
   padding: 6vh 6vw;
   position: relative;
-  animation: fadeIn 0.9s ease both;
+  backface-visibility: hidden;
+  transform-origin: left center;
 }
 .screen.active { display: flex; }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
+.screen.screen-leaving {
+  animation: pageOut 0.42s ease forwards;
+}
+.screen.screen-entering {
+  animation: pageIn 0.55s ease forwards;
+}
+
+@keyframes pageOut {
+  0% { transform: rotateY(0deg) translateX(0); opacity: 1; }
+  100% { transform: rotateY(-16deg) translateX(-6%); opacity: 0; }
+}
+@keyframes pageIn {
+  0% { transform: rotateY(12deg) translateX(6%); opacity: 0; }
+  100% { transform: rotateY(0deg) translateX(0); opacity: 1; }
+}
+
+.msg-leaving {
+  animation: pageOut 0.42s ease forwards;
+}
+.msg-entering {
+  animation: pageIn 0.55s ease forwards;
 }
 
 .center-content {
@@ -49,6 +70,7 @@ body { min-height: 100vh; position: relative; }
   align-items: center;
   gap: 1.4rem;
   z-index: 2;
+  perspective: 900px;
 }
 .center-content.wide { max-width: 920px; }
 
@@ -158,12 +180,36 @@ body { min-height: 100vh; position: relative; }
   opacity: 0.6;
 }
 
-.gate-hint {
-  min-height: 1.2em;
-  font-size: 0.85rem;
+.hint-card {
+  width: 100%;
+  padding: 0.9rem 1.3rem;
+  border: 1px solid rgba(217,138,156,0.4);
+  border-radius: 12px;
+  background: rgba(217,138,156,0.08);
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  pointer-events: none;
+}
+.hint-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.hint-label {
+  display: block;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 0.3rem;
+}
+.hint-text {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
   font-style: italic;
   color: var(--cream);
-  opacity: 0.7;
+  opacity: 0.9;
 }
 #gate-form {
   display: flex;
@@ -327,7 +373,8 @@ body { min-height: 100vh; position: relative; }
 
 @media (prefers-reduced-motion: reduce) {
   .particle { display: none; }
-  .screen { animation: none; }
+  .screen.screen-leaving, .screen.screen-entering { animation: none; }
+  .msg-leaving, .msg-entering { animation: none; }
 }
 
 @media (max-width: 520px) {
