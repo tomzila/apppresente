@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Victória</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Camada de partículas (corações e folhas) -->
+<div id="particle-layer" aria-hidden="true"></div>
+
+<!-- Botão de música -->
+<button id="music-toggle" class="music-btn" aria-label="Tocar música">
+  <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="18" cy="16" r="3" fill="currentColor"/></svg>
+</button>
+<audio id="bg-music" loop>
+  <source src="assets/audio/eu-te-devoro.mp3" type="audio/mpeg">
+</audio>
+
+<main id="app">
+
+  <!-- TELA 1 — ENIGMA / SENHA -->
+  <section class="screen active" id="screen-gate" data-particles="hearts,leaves">
+    <div class="gate-card">
+      <span class="eyebrow-riddle">um enigma antes de entrar</span>
+      <h1 class="riddle">Quem é a mulher mais bonita<br>e foda do mundo?</h1>
+      <form id="gate-form" autocomplete="off">
+        <input type="text" id="gate-input" placeholder="digite a resposta..." autocomplete="off">
+        <button type="submit">abrir</button>
+      </form>
+      <p class="gate-feedback" id="gate-feedback"></p>
+      <p class="gate-hint" id="gate-hint"></p>
+    </div>
+  </section>
+
+  <!-- TELA 2 — ABERTURA -->
+  <section class="screen" id="screen-welcome" data-particles="hearts,leaves">
+    <div class="center-content">
+      <span class="eyebrow">feliz aniversário</span>
+      <h1 class="display-lg">Victória</h1>
+      <p class="lede">Preparei um caminho pra você percorrer.<br>Vem comigo?</p>
+      <button class="btn-next" data-next>continuar</button>
+    </div>
+  </section>
+
+  <!-- TELA 3 — MENSAGENS PROGRESSIVAS -->
+  <section class="screen" id="screen-messages" data-particles="hearts,leaves">
+    <div class="center-content">
+      <span class="eyebrow" id="msg-counter">1 / 1</span>
+      <p class="message-text" id="message-text"></p>
+      <button class="btn-next" id="msg-next">próxima</button>
+    </div>
+  </section>
+
+  <!-- TELA 4 — CONTADOR DE TEMPO -->
+  <section class="screen" id="screen-counter" data-particles="hearts,leaves">
+    <div class="center-content">
+      <span class="eyebrow">nosso tempo</span>
+      <h2 class="display-md">há quanto tempo estamos juntos</h2>
+      <div class="counter-grid">
+        <div class="counter-box"><span id="c-days">0</span><label>dias</label></div>
+        <div class="counter-box"><span id="c-hours">0</span><label>horas</label></div>
+        <div class="counter-box"><span id="c-min">0</span><label>min</label></div>
+        <div class="counter-box"><span id="c-sec">0</span><label>seg</label></div>
+      </div>
+      <button class="btn-next" data-next>continuar</button>
+    </div>
+  </section>
+
+  <!-- TELA 5 — GALERIA DE FOTOS -->
+  <section class="screen" id="screen-gallery" data-particles="hearts,leaves">
+    <div class="center-content wide">
+      <span class="eyebrow">nossos momentos</span>
+      <h2 class="display-md">a gente em fotos</h2>
+      <div class="gallery-grid" id="gallery-grid"></div>
+      <button class="btn-next" data-next>continuar</button>
+    </div>
+  </section>
+
+  <!-- TELA 6 — FINAL -->
+  <section class="screen" id="screen-final" data-particles="hearts,leaves">
+    <div class="center-content">
+      <span class="eyebrow">pra sempre</span>
+      <h2 class="display-md">Feliz aniversário, meu amor.</h2>
+      <p class="lede">Que venham muitos anos assim,<br>eu e você.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- Navegação por pontos -->
+<nav id="dots" aria-hidden="true"></nav>
+
+<script src="script.js"></script>
+</body>
+</html>
