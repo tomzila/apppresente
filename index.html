@@ -25,8 +25,16 @@
 <main id="app">
 
   <!-- TELA 1 — ENIGMA / SENHA -->
-  <section class="screen active" id="screen-gate" data-particles="hearts,leaves">
+  <section class="screen active" id="screen-gate" data-particles="hearts">
     <div class="gate-card">
+      <div class="card-hearts" aria-hidden="true">
+        <span class="card-heart h1"></span>
+        <span class="card-heart h2"></span>
+        <span class="card-heart h3 h-gold"></span>
+        <span class="card-heart h4"></span>
+        <span class="card-heart h5 h-gold"></span>
+        <span class="card-heart h6"></span>
+      </div>
       <span class="eyebrow-riddle">um enigma antes de entrar</span>
       <h1 class="riddle">Quem é a mulher mais bonita<br>e foda do mundo?</h1>
       <form id="gate-form" autocomplete="off">
@@ -42,7 +50,7 @@
   </section>
 
   <!-- TELA 2 — ABERTURA -->
-  <section class="screen" id="screen-welcome" data-particles="hearts,leaves">
+  <section class="screen" id="screen-welcome" data-particles="hearts">
     <div class="center-content">
       <span class="eyebrow">feliz aniversário</span>
       <h1 class="display-lg">Victória</h1>
@@ -52,7 +60,7 @@
   </section>
 
   <!-- TELA 3 — MENSAGENS PROGRESSIVAS -->
-  <section class="screen" id="screen-messages" data-particles="hearts,leaves">
+  <section class="screen" id="screen-messages" data-particles="hearts">
     <div class="center-content">
       <span class="eyebrow" id="msg-counter">1 / 1</span>
       <p class="message-text" id="message-text"></p>
@@ -61,7 +69,7 @@
   </section>
 
   <!-- TELA 4 — CONTADOR DE TEMPO -->
-  <section class="screen" id="screen-counter" data-particles="hearts,leaves">
+  <section class="screen" id="screen-counter" data-particles="hearts">
     <div class="center-content">
       <span class="eyebrow">nosso tempo</span>
       <h2 class="display-md">há quanto tempo estamos juntos</h2>
@@ -76,17 +84,17 @@
   </section>
 
   <!-- TELA 5 — GALERIA DE FOTOS -->
-  <section class="screen" id="screen-gallery" data-particles="hearts,leaves">
+  <section class="screen" id="screen-gallery" data-particles="hearts">
     <div class="center-content wide">
       <span class="eyebrow">nossos momentos</span>
       <h2 class="display-md">a gente em fotos</h2>
-      <div class="gallery-grid" id="gallery-grid"></div>
-      <button class="btn-next" data-next>continuar</button>
+      <div class="gallery-stage" id="gallery-stage"></div>
+      <button class="btn-next gallery-next-hidden" id="gallery-next-btn" data-next>continuar</button>
     </div>
   </section>
 
   <!-- TELA 6 — FINAL -->
-  <section class="screen" id="screen-final" data-particles="hearts,leaves">
+  <section class="screen" id="screen-final" data-particles="hearts">
     <div class="center-content">
       <span class="eyebrow">pra sempre</span>
       <h2 class="display-md">Feliz aniversário, meu amor.</h2>

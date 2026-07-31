@@ -22,8 +22,11 @@ const INICIO_NAMORO = new Date(2026, 0, 11, 11, 0, 0); // 11/01/2026 às 11:00
 
 // Fotos da galeria — coloque os arquivos em assets/fotos/ e liste os nomes aqui.
 const FOTOS = [
-  // "assets/fotos/foto1.jpg",
-  // "assets/fotos/foto2.jpg",
+  "assets/fotos/fotominha.jpeg",
+  "assets/fotos/foto2.jpeg",
+  "assets/fotos/foto3.jpeg",
+  "assets/fotos/foto4.jpeg",
+  "assets/fotos/foto5.jpeg",
 ];
 
 /* ============================================================
@@ -54,6 +57,7 @@ function nextScreen() {
     currentIndex++;
     updateDots();
     updateParticlesForScreen(next);
+    if (next.id === "screen-gallery") iniciarGaleriaSeNecessario();
     setTimeout(() => {
       next.classList.remove("screen-entering");
       transitioning = false;
@@ -171,18 +175,105 @@ setInterval(atualizarContador, 1000);
 atualizarContador();
 
 /* ============================================================
-   TELA 5 — GALERIA DE FOTOS
+   TELA 5 — GALERIA DE FOTOS (slide direcional)
+   Cada foto entra deslizando de um lado aleatório, fica
+   parada por um tempo, e sai enquanto a próxima entra.
    ============================================================ */
-const galleryGrid = document.getElementById("gallery-grid");
-if (FOTOS.length === 0) {
-  galleryGrid.innerHTML = `<p class="gallery-empty">Coloque as fotos em assets/fotos/ e liste os nomes no array FOTOS, lá no início do script.js.</p>`;
-} else {
-  FOTOS.forEach(src => {
-    const img = document.createElement("img");
-    img.src = src;
-    img.alt = "Foto do casal";
-    galleryGrid.appendChild(img);
-  });
+const galleryStage = document.getElementById("gallery-stage");
+const galleryNextBtn = document.getElementById("gallery-next-btn");
+const DIRECOES_GALERIA = ["top", "bottom", "left", "right"];
+const TEMPO_PAUSA_FOTO = 2600;   // quanto tempo cada foto fica parada (ms)
+const DURACAO_TRANSICAO_FOTO = 800; // duração da entrada/saída (ms)
+const TEMPO_POR_FOTO = TEMPO_PAUSA_FOTO + DURACAO_TRANSICAO_FOTO;
+const SEM_MOVIMENTO = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if (!galleryNextBtn) {
+  console.error('Elemento com id="gallery-next-btn" não encontrado no HTML. Confira se o index.html foi substituído pela versão mais recente.');
+}
+
+let galleryIndex = 0;
+const fotosJaExibidas = new Set(); // guarda quais posições do array FOTOS já apareceram
+
+// Função dedicada: só libera o botão "continuar" quando TODAS as
+// posições de FOTOS já tiverem passado pela tela pelo menos 1 vez.
+function liberarBotaoSeTodasForamVistas(indiceFotoExibida) {
+  fotosJaExibidas.add(indiceFotoExibida);
+  if (fotosJaExibidas.size >= FOTOS.length && galleryNextBtn) {
+    galleryNextBtn.classList.remove("gallery-next-hidden");
+  }
+}
+
+function offsetDirecao(dir) {
+  const mapa = {
+    top: "translateY(-120%)",
+    bottom: "translateY(120%)",
+    left: "translateX(-120%)",
+    right: "translateX(120%)"
+  };
+  return mapa[dir];
+}
+
+function sortearDirecao(excluir) {
+  const opcoes = DIRECOES_GALERIA.filter(d => d !== excluir);
+  return opcoes[Math.floor(Math.random() * opcoes.length)];
+}
+
+function mostrarProximaFoto() {
+  const fotoAtual = galleryStage.querySelector("img");
+  const dirEntrada = sortearDirecao();
+  const indiceAtual = galleryIndex % FOTOS.length;
+  const src = FOTOS[indiceAtual];
+  galleryIndex++;
+
+  // Marca essa posição como "já vista" — quando todas tiverem
+  // sido marcadas, a função libera o botão sozinha.
+  liberarBotaoSeTodasForamVistas(indiceAtual);
+
+  const novaFoto = document.createElement("img");
+  novaFoto.src = src;
+  novaFoto.alt = "Foto do casal";
+
+  if (SEM_MOVIMENTO) {
+    galleryStage.innerHTML = "";
+    galleryStage.appendChild(novaFoto);
+  } else {
+    novaFoto.style.transition = `transform ${DURACAO_TRANSICAO_FOTO}ms ease, opacity ${DURACAO_TRANSICAO_FOTO}ms ease`;
+    novaFoto.style.transform = offsetDirecao(dirEntrada);
+    novaFoto.style.opacity = "0";
+    galleryStage.appendChild(novaFoto);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        novaFoto.style.transform = "translate(0, 0)";
+        novaFoto.style.opacity = "1";
+      });
+    });
+
+    if (fotoAtual) {
+      const dirSaida = sortearDirecao(dirEntrada);
+      setTimeout(() => {
+        fotoAtual.style.transform = offsetDirecao(dirSaida);
+        fotoAtual.style.opacity = "0";
+        setTimeout(() => fotoAtual.remove(), DURACAO_TRANSICAO_FOTO);
+      }, 50);
+    }
+  }
+
+  setTimeout(mostrarProximaFoto, TEMPO_POR_FOTO);
+}
+
+let galleryIniciada = false;
+
+function iniciarGaleriaSeNecessario() {
+  if (galleryIniciada) return; // evita reiniciar se ela passar pela tela de novo
+  galleryIniciada = true;
+
+  if (FOTOS.length === 0) {
+    galleryStage.innerHTML = `<p class="gallery-empty">Coloque as fotos em assets/fotos/ e liste os nomes no array FOTOS, lá no início do script.js.</p>`;
+    if (galleryNextBtn) galleryNextBtn.classList.remove("gallery-next-hidden");
+  } else {
+    mostrarProximaFoto();
+  }
 }
 
 /* ============================================================
@@ -201,55 +292,47 @@ musicBtn.addEventListener("click", () => {
 });
 
 /* ============================================================
-   PARTÍCULAS — corações e folhas flutuantes
-   Configurável por tela via atributo data-particles="hearts,leaves"
-   no HTML de cada <section class="screen">.
+   PARTÍCULAS — corações flutuantes
+   Configurável por tela via atributo data-particles="hearts"
+   no HTML de cada <section class="screen"> (deixe vazio pra
+   desativar numa tela específica).
    ============================================================ */
-const HEART_SVG = `<svg viewBox="0 0 32 29" width="22" height="20"><path fill="#d98a9c" d="M16 29S0 18.5 0 8.7C0 3.9 3.9 0 8.7 0c3 0 5.7 1.5 7.3 3.9C17.6 1.5 20.3 0 23.3 0 28.1 0 32 3.9 32 8.7 32 18.5 16 29 16 29z"/></svg>`;
-
-const LEAF_SVG = `<svg viewBox="0 0 40 40" width="22" height="22"><path fill="#4a7a55" d="M20 2C10 2 3 12 3 22c0 9 7 16 17 16s17-7 17-16C37 12 30 2 20 2z"/><path stroke="#2f4a34" stroke-width="1.4" fill="none" d="M20 6v30M20 14c-5 0-9 3-11 6M20 20c-5 0-9 3-12 7M20 14c5 0 9 3 11 6M20 20c5 0 9 3 12 7"/></svg>`;
+const HEART_SVG = `<svg viewBox="0 0 32 29" width="22" height="20"><path fill="#f2668a" d="M16 29S0 18.5 0 8.7C0 3.9 3.9 0 8.7 0c3 0 5.7 1.5 7.3 3.9C17.6 1.5 20.3 0 23.3 0 28.1 0 32 3.9 32 8.7 32 18.5 16 29 16 29z"/></svg>`;
 
 const particleLayer = document.getElementById("particle-layer");
-let activeTypes = { hearts: false, leaves: false };
+let activeTypes = { hearts: false };
 let spawnTimer = null;
 
 function updateParticlesForScreen(screenEl) {
   const cfg = (screenEl.dataset.particles || "").split(",").map(s => s.trim());
   activeTypes.hearts = cfg.includes("hearts");
-  activeTypes.leaves = cfg.includes("leaves");
 }
 
 function spawnParticle() {
-  const types = [];
-  if (activeTypes.hearts) types.push("heart");
-  if (activeTypes.leaves) types.push("leaf");
-  if (types.length === 0) return;
+  if (!activeTypes.hearts) return;
 
-  const type = types[Math.floor(Math.random() * types.length)];
   const el = document.createElement("div");
-  el.className = `particle ${type}`;
-  el.innerHTML = type === "heart" ? HEART_SVG : LEAF_SVG;
+  el.className = "particle heart";
+  el.innerHTML = HEART_SVG;
 
   const size = 0.7 + Math.random() * 0.9;
   const left = Math.random() * 100;
-  const duration = 7 + Math.random() * 6;
+  const duration = 16 + Math.random() * 10; // flutuação lenta
   const drift = (Math.random() * 80 - 40) + "px";
-  const startY = type === "heart" ? "100vh" : "-40px";
 
   el.style.left = left + "vw";
-  el.style.top = type === "heart" ? "auto" : "-40px";
-  el.style.bottom = type === "heart" ? "-40px" : "auto";
+  el.style.bottom = "-40px";
   el.style.transform = `scale(${size})`;
   el.style.setProperty("--drift", drift);
   el.style.animationDuration = duration + "s";
-  el.style.animationTimingFunction = "linear";
+  el.style.animationTimingFunction = "ease-in-out";
   el.style.animationFillMode = "forwards";
 
   particleLayer.appendChild(el);
   el.addEventListener("animationend", () => el.remove());
 }
 
-spawnTimer = setInterval(spawnParticle, 550);
+spawnTimer = setInterval(spawnParticle, 900);
 
 /* ============================================================
    INÍCIO
