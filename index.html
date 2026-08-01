@@ -99,6 +99,24 @@
       <span class="eyebrow">pra sempre</span>
       <h2 class="display-md">Feliz aniversário, meu amor.</h2>
       <p class="lede">Que venham muitos anos assim,<br>eu e você.</p>
+      <button class="btn-next" data-next>mais uma coisinha...</button>
+    </div>
+  </section>
+
+  <!-- TELA 7 — ADIVINHE O PRESENTE -->
+  <section class="screen" id="screen-quiz" data-particles="hearts">
+    <div class="center-content">
+      <span class="eyebrow">mais uma coisinha</span>
+      <h2 class="display-md">Adivinhe qual é o seu presente de aniversário</h2>
+      <img class="quiz-hint-img" src="assets/fotos/foto3.jpeg" alt="Dica do presente">
+      <div class="quiz-options" id="quiz-options"></div>
+    </div>
+
+    <div class="quiz-popup" id="quiz-popup">
+      <div class="quiz-popup-card">
+        <p class="quiz-popup-text" id="quiz-popup-text"></p>
+        <button class="btn-next" id="quiz-popup-close">fechar</button>
+      </div>
     </div>
   </section>
 
@@ -106,6 +124,10 @@
 
 <!-- Navegação por pontos -->
 <nav id="dots" aria-hidden="true"></nav>
+
+<!-- Setas de navegação livre (aparecem só depois de chegar na última tela) -->
+<button class="nav-arrow nav-arrow-left nav-arrow-hidden" id="nav-prev" aria-label="Tela anterior">‹</button>
+<button class="nav-arrow nav-arrow-right nav-arrow-hidden" id="nav-next" aria-label="Próxima tela">›</button>
 
 <script src="script.js"></script>
 </body>

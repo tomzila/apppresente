@@ -29,6 +29,15 @@ const FOTOS = [
   "assets/fotos/foto5.jpeg",
 ];
 
+// Opções do quiz "adivinhe o presente" — pode trocar os textos à vontade,
+// a resposta certa é sempre a que tiver "correta: true" (hoje é a opção B).
+const QUIZ_OPCOES = [
+  { texto: "Tênis", correta: false },
+  { texto: "Caneta", correta: true },
+  { texto: "Garrafa", correta: false },
+  { texto: "Everson Zoio", correta: false }
+];
+
 /* ============================================================
    NAVEGAÇÃO ENTRE TELAS
    ============================================================ */
@@ -43,26 +52,39 @@ function showScreen(index) {
 }
 
 let transitioning = false;
+const NAV_MIN_INDEX = 1; // setas de navegação livre não voltam até a tela de senha
 
-function nextScreen() {
-  if (transitioning || currentIndex >= screens.length - 1) return;
+function irParaTela(novoIndex) {
+  if (
+    transitioning ||
+    novoIndex < 0 ||
+    novoIndex >= screens.length ||
+    novoIndex === currentIndex
+  ) return;
+
   transitioning = true;
   const current = screens[currentIndex];
-  const next = screens[currentIndex + 1];
+  const next = screens[novoIndex];
 
   current.classList.add("screen-leaving");
   setTimeout(() => {
     current.classList.remove("active", "screen-leaving");
     next.classList.add("active", "screen-entering");
-    currentIndex++;
+    currentIndex = novoIndex;
     updateDots();
     updateParticlesForScreen(next);
+    atualizarSetasNavegacao();
     if (next.id === "screen-gallery") iniciarGaleriaSeNecessario();
+    if (next.id === "screen-quiz") revelarNavegacaoLivre();
     setTimeout(() => {
       next.classList.remove("screen-entering");
       transitioning = false;
     }, 520);
   }, 420);
+}
+
+function nextScreen() {
+  irParaTela(currentIndex + 1);
 }
 
 document.querySelectorAll("[data-next]").forEach(btn => {
@@ -81,6 +103,28 @@ function updateDots() {
     d.classList.toggle("active", i === currentIndex);
   });
 }
+
+// Setas de navegação livre — ficam escondidas até ela chegar na última tela,
+// aí ficam disponíveis pra sempre, deixando ela rever telas anteriores.
+const navPrevBtn = document.getElementById("nav-prev");
+const navNextBtn = document.getElementById("nav-next");
+let navegacaoLivreLiberada = false;
+
+function atualizarSetasNavegacao() {
+  navPrevBtn.disabled = currentIndex <= NAV_MIN_INDEX;
+  navNextBtn.disabled = currentIndex >= screens.length - 1;
+}
+
+function revelarNavegacaoLivre() {
+  if (navegacaoLivreLiberada) return;
+  navegacaoLivreLiberada = true;
+  navPrevBtn.classList.remove("nav-arrow-hidden");
+  navNextBtn.classList.remove("nav-arrow-hidden");
+  atualizarSetasNavegacao();
+}
+
+navPrevBtn.addEventListener("click", () => irParaTela(currentIndex - 1));
+navNextBtn.addEventListener("click", () => irParaTela(currentIndex + 1));
 
 /* ============================================================
    TELA 1 — ENIGMA / SENHA
@@ -333,6 +377,44 @@ function spawnParticle() {
 }
 
 spawnTimer = setInterval(spawnParticle, 900);
+
+/* ============================================================
+   TELA 7 — QUIZ "ADIVINHE O PRESENTE"
+   ============================================================ */
+const LETRAS_QUIZ = ["A", "B", "C", "D", "E", "F"];
+const quizOptionsEl = document.getElementById("quiz-options");
+const quizPopup = document.getElementById("quiz-popup");
+const quizPopupText = document.getElementById("quiz-popup-text");
+const quizPopupClose = document.getElementById("quiz-popup-close");
+let quizJaAcertou = false;
+
+QUIZ_OPCOES.forEach((opcao, i) => {
+  const btn = document.createElement("button");
+  btn.className = "quiz-option";
+  btn.innerHTML = `<span class="quiz-option-letra">${LETRAS_QUIZ[i]}</span> ${opcao.texto}`;
+  btn.addEventListener("click", () => responderQuiz(opcao.correta, btn));
+  quizOptionsEl.appendChild(btn);
+});
+
+function responderQuiz(correta, btnClicado) {
+  document.querySelectorAll(".quiz-option").forEach(b => (b.disabled = true));
+  btnClicado.classList.add(correta ? "quiz-option-certa" : "quiz-option-errada");
+
+  quizPopupText.textContent = correta
+    ? "Isso mesmo! Você acertou 🎉"
+    : "Não foi dessa vez 😅 tenta de novo!";
+  quizJaAcertou = correta;
+  quizPopup.classList.add("visible");
+}
+
+quizPopupClose.addEventListener("click", () => {
+  quizPopup.classList.remove("visible");
+  if (quizJaAcertou) return; // já acertou, deixa como está
+  document.querySelectorAll(".quiz-option").forEach(b => {
+    b.disabled = false;
+    b.classList.remove("quiz-option-errada");
+  });
+});
 
 /* ============================================================
    INÍCIO

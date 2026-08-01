@@ -374,6 +374,138 @@ body { min-height: 100vh; position: relative; }
 }
 .music-btn.playing { color: var(--rose); border-color: var(--rose); }
 
+/* ---------- Quiz "adivinhe o presente" ---------- */
+.quiz-hint-img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid rgba(234,176,78,0.35);
+  box-shadow: 0 0 30px rgba(0,0,0,0.25);
+}
+.quiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  width: 100%;
+  max-width: 420px;
+}
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(234,176,78,0.35);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.3s ease, background 0.3s ease;
+}
+.quiz-option:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+}
+.quiz-option:disabled { cursor: default; opacity: 0.75; }
+.quiz-option-letra {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+.quiz-option-certa {
+  border-color: var(--leaf-700);
+  background: rgba(47,156,86,0.15);
+}
+.quiz-option-certa .quiz-option-letra { border-color: var(--leaf-700); color: var(--leaf-700); }
+.quiz-option-errada {
+  border-color: var(--rose);
+  background: rgba(242,102,138,0.12);
+}
+.quiz-option-errada .quiz-option-letra { border-color: var(--rose); color: var(--rose); }
+
+.quiz-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6vw;
+  background: rgba(17,7,13,0.6);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.quiz-popup.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.quiz-popup-card {
+  max-width: 360px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 2.4rem 2rem;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(rgba(26,10,21,0.92), rgba(26,10,21,0.92)) padding-box,
+    linear-gradient(135deg, var(--rose), var(--gold) 55%, var(--leaf-700)) border-box;
+  transform: translateY(18px) scale(0.96);
+  transition: transform 0.4s ease;
+}
+.quiz-popup.visible .quiz-popup-card {
+  transform: translateY(0) scale(1);
+}
+.quiz-popup-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.3rem;
+  line-height: 1.5;
+}
+
+/* ---------- Setas de navegação livre ---------- */
+.nav-arrow {
+  position: fixed;
+  bottom: 18px;
+  z-index: 10;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(234,176,78,0.4);
+  background: rgba(28,15,22,0.55);
+  color: var(--gold);
+  font-size: 1.3rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: opacity 0.5s ease, transform 0.2s ease;
+}
+.nav-arrow:hover:not(:disabled) { transform: scale(1.08); }
+.nav-arrow:disabled { opacity: 0.3; cursor: default; }
+.nav-arrow-left { left: 18px; }
+.nav-arrow-right { right: 18px; }
+.nav-arrow-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* ---------- Partículas (corações) ---------- */
 #particle-layer {
   position: fixed;
