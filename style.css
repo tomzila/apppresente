@@ -1,12 +1,11 @@
 :root {
-  --wine-950: #1a0a15;
-  --wine-900: #33122a;
-  --wine-800: #4a1936;
-  --leaf-900: #1c3324;
-  --leaf-700: #2f9c56;
-  --gold: #eab04e;
-  --cream: #f9ecda;
-  --rose: #f2668a;
+  --bg-1: #fdf1f6;       /* fundo — tom mais claro (bordas do gradiente) */
+  --bg-2: #f9d7e7;       /* fundo — tom principal, rosa suave */
+  --rose: #ec4899;       /* rosa vivo — bordas, botões, corações, detalhes */
+  --rose-deep: #c2185b;  /* rosa escuro — usado em texto, pra garantir leitura no fundo claro */
+  --gold: #b3792f;       /* dourado (rosé gold) — acento secundário */
+  --text-main: #4a1030;  /* cor principal do texto — escuro, legível no fundo claro */
+  --leaf-700: #2f9c56;   /* verde — mantido só pra indicar resposta certa no quiz */
   --font-display: 'Cormorant Garamond', serif;
   --font-body: 'Jost', sans-serif;
 }
@@ -16,10 +15,10 @@
 html, body {
   height: 100%;
   background:
-    radial-gradient(ellipse at 15% 0%, rgba(242,102,138,0.16), transparent 55%),
-    radial-gradient(ellipse at 85% 100%, rgba(47,156,86,0.12), transparent 55%),
-    radial-gradient(ellipse at top, var(--wine-900), var(--wine-950) 70%);
-  color: var(--cream);
+    radial-gradient(ellipse at 15% 0%, rgba(236,72,153,0.14), transparent 55%),
+    radial-gradient(ellipse at 85% 100%, rgba(179,121,47,0.12), transparent 55%),
+    radial-gradient(ellipse at top, var(--bg-2), var(--bg-1) 70%);
+  color: var(--text-main);
   font-family: var(--font-body);
   overflow-x: hidden;
 }
@@ -92,7 +91,7 @@ body { min-height: 100vh; position: relative; }
   font-weight: 600;
   font-size: clamp(3rem, 9vw, 6rem);
   line-height: 1;
-  color: var(--cream);
+  color: var(--text-main);
 }
 
 .display-md {
@@ -107,7 +106,7 @@ body { min-height: 100vh; position: relative; }
   font-weight: 300;
   font-size: 1.05rem;
   line-height: 1.6;
-  color: var(--cream);
+  color: var(--text-main);
   opacity: 0.88;
 }
 
@@ -127,7 +126,7 @@ body { min-height: 100vh; position: relative; }
 }
 .btn-next:hover, .gate-card button:hover {
   background: var(--gold);
-  color: var(--wine-950);
+  color: #fff8fb;
   transform: translateY(-2px);
 }
 .btn-next:focus-visible, .gate-card button:focus-visible, #gate-input:focus-visible {
@@ -149,10 +148,10 @@ body { min-height: 100vh; position: relative; }
   border-radius: 22px;
   border: 1px solid transparent;
   background:
-    linear-gradient(rgba(26,10,21,0.86), rgba(26,10,21,0.86)) padding-box,
+    linear-gradient(rgba(255,248,251,0.88), rgba(255,248,251,0.88)) padding-box,
     linear-gradient(135deg, var(--rose), var(--gold) 55%, var(--leaf-700)) border-box;
   backdrop-filter: blur(8px);
-  box-shadow: 0 0 44px rgba(242,102,138,0.18);
+  box-shadow: 0 10px 34px rgba(194,24,91,0.14);
   z-index: 2;
 }
 .card-hearts {
@@ -165,11 +164,11 @@ body { min-height: 100vh; position: relative; }
   position: absolute;
   background-repeat: no-repeat;
   background-size: contain;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 29'%3E%3Cpath fill='%23f2668a' d='M16 29S0 18.5 0 8.7C0 3.9 3.9 0 8.7 0c3 0 5.7 1.5 7.3 3.9C17.6 1.5 20.3 0 23.3 0 28.1 0 32 3.9 32 8.7 32 18.5 16 29 16 29z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 29'%3E%3Cpath fill='%23ec4899' d='M16 29S0 18.5 0 8.7C0 3.9 3.9 0 8.7 0c3 0 5.7 1.5 7.3 3.9C17.6 1.5 20.3 0 23.3 0 28.1 0 32 3.9 32 8.7 32 18.5 16 29 16 29z'/%3E%3C/svg%3E");
   animation: cardHeartFloat ease-in-out infinite;
 }
 .card-heart.h-gold {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 29'%3E%3Cpath fill='%23eab04e' d='M16 29S0 18.5 0 8.7C0 3.9 3.9 0 8.7 0c3 0 5.7 1.5 7.3 3.9C17.6 1.5 20.3 0 23.3 0 28.1 0 32 3.9 32 8.7 32 18.5 16 29 16 29z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 29'%3E%3Cpath fill='%23b3792f' d='M16 29S0 18.5 0 8.7C0 3.9 3.9 0 8.7 0c3 0 5.7 1.5 7.3 3.9C17.6 1.5 20.3 0 23.3 0 28.1 0 32 3.9 32 8.7 32 18.5 16 29 16 29z'/%3E%3C/svg%3E");
 }
 .card-heart.h1 { top: -6%; right: -6%; width: 130px; height: 118px; opacity: 0.55; animation-duration: 3.4s; animation-delay: 0s; }
 .card-heart.h2 { top: 4%; left: 8%; width: 60px; height: 55px; opacity: 0.4; animation-duration: 2.6s; animation-delay: 0.3s; }
@@ -198,15 +197,15 @@ body { min-height: 100vh; position: relative; }
   font-size: clamp(1.05rem, 3.2vw, 1.4rem);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--rose);
+  color: var(--rose-deep);
 }
 
 .hint-card {
   width: 100%;
   padding: 0.9rem 1.3rem;
-  border: 1px solid rgba(242,102,138,0.4);
+  border: 1px solid rgba(236,72,153,0.45);
   border-radius: 12px;
-  background: rgba(242,102,138,0.08);
+  background: rgba(236,72,153,0.08);
   opacity: 0;
   transform: translateY(26px);
   transition: opacity 0.45s ease, transform 0.45s ease;
@@ -222,14 +221,14 @@ body { min-height: 100vh; position: relative; }
   font-size: 0.65rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--rose);
+  color: var(--rose-deep);
   margin-bottom: 0.3rem;
 }
 .hint-text {
   font-family: var(--font-body);
   font-size: 0.9rem;
   font-style: italic;
-  color: var(--cream);
+  color: var(--text-main);
   opacity: 0.9;
 }
 #gate-form {
@@ -243,16 +242,16 @@ body { min-height: 100vh; position: relative; }
   flex: 1 1 200px;
   padding: 0.85rem 1.1rem;
   border-radius: 999px;
-  border: 1px solid rgba(243,231,216,0.3);
-  background: rgba(255,255,255,0.04);
-  color: var(--cream);
+  border: 1px solid rgba(74,16,48,0.25);
+  background: rgba(255,255,255,0.75);
+  color: var(--text-main);
   font-family: var(--font-body);
   font-size: 0.95rem;
 }
 .gate-feedback {
   min-height: 1.2em;
   font-size: 0.85rem;
-  color: var(--rose);
+  color: var(--rose-deep);
 }
 
 /* ---------- Mensagens progressivas ---------- */
@@ -279,9 +278,9 @@ body { min-height: 100vh; position: relative; }
   align-items: center;
   gap: 0.3rem;
   padding: 1.1rem 0.6rem;
-  border: 1px solid rgba(234,176,78,0.3);
+  border: 1px solid rgba(179,121,47,0.35);
   border-radius: 14px;
-  background: rgba(255,255,255,0.03);
+  background: rgba(255,255,255,0.55);
   min-width: 68px;
 }
 .counter-box span {
@@ -306,7 +305,7 @@ body { min-height: 100vh; position: relative; }
   margin: 0 auto;
   overflow: hidden;
   border-radius: 18px;
-  box-shadow: 0 0 30px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 26px rgba(74,16,48,0.16);
 }
 .gallery-next-hidden {
   opacity: 0;
@@ -320,13 +319,13 @@ body { min-height: 100vh; position: relative; }
   height: 100%;
   object-fit: cover;
   border-radius: 18px;
-  border: 1px solid rgba(234,176,78,0.3);
+  border: 1px solid rgba(179,121,47,0.35);
 }
 .gallery-empty {
   font-size: 0.85rem;
   opacity: 0.6;
   padding: 2rem;
-  border: 1px dashed rgba(243,231,216,0.3);
+  border: 1px dashed rgba(74,16,48,0.25);
   border-radius: 12px;
   width: 100%;
 }
@@ -341,12 +340,17 @@ body { min-height: 100vh; position: relative; }
   display: flex;
   gap: 8px;
   z-index: 10;
+  transition: opacity 0.5s ease;
+}
+#dots.dots-hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 #dots .dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: rgba(243,231,216,0.25);
+  background: rgba(194,24,91,0.22);
   transition: background 0.3s ease, transform 0.3s ease;
 }
 #dots .dot.active {
@@ -363,8 +367,8 @@ body { min-height: 100vh; position: relative; }
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid rgba(234,176,78,0.4);
-  background: rgba(28,15,22,0.55);
+  border: 1px solid rgba(179,121,47,0.4);
+  background: rgba(255,255,255,0.7);
   color: var(--gold);
   display: flex;
   align-items: center;
@@ -380,8 +384,8 @@ body { min-height: 100vh; position: relative; }
   height: 220px;
   object-fit: cover;
   border-radius: 16px;
-  border: 1px solid rgba(234,176,78,0.35);
-  box-shadow: 0 0 30px rgba(0,0,0,0.25);
+  border: 1px solid rgba(179,121,47,0.4);
+  box-shadow: 0 8px 26px rgba(74,16,48,0.16);
 }
 .quiz-options {
   display: grid;
@@ -395,10 +399,10 @@ body { min-height: 100vh; position: relative; }
   align-items: center;
   gap: 0.55rem;
   padding: 0.75rem 1rem;
-  border: 1px solid rgba(234,176,78,0.35);
+  border: 1px solid rgba(179,121,47,0.4);
   border-radius: 12px;
-  background: rgba(255,255,255,0.03);
-  color: var(--cream);
+  background: rgba(255,255,255,0.55);
+  color: var(--text-main);
   font-family: var(--font-body);
   font-size: 0.9rem;
   text-align: left;
@@ -429,9 +433,9 @@ body { min-height: 100vh; position: relative; }
 .quiz-option-certa .quiz-option-letra { border-color: var(--leaf-700); color: var(--leaf-700); }
 .quiz-option-errada {
   border-color: var(--rose);
-  background: rgba(242,102,138,0.12);
+  background: rgba(236,72,153,0.14);
 }
-.quiz-option-errada .quiz-option-letra { border-color: var(--rose); color: var(--rose); }
+.quiz-option-errada .quiz-option-letra { border-color: var(--rose); color: var(--rose-deep); }
 
 .quiz-popup {
   position: fixed;
@@ -441,7 +445,7 @@ body { min-height: 100vh; position: relative; }
   align-items: center;
   justify-content: center;
   padding: 6vw;
-  background: rgba(17,7,13,0.6);
+  background: rgba(74,16,48,0.4);
   backdrop-filter: blur(4px);
   opacity: 0;
   pointer-events: none;
@@ -462,7 +466,7 @@ body { min-height: 100vh; position: relative; }
   border-radius: 20px;
   border: 1px solid transparent;
   background:
-    linear-gradient(rgba(26,10,21,0.92), rgba(26,10,21,0.92)) padding-box,
+    linear-gradient(rgba(255,248,251,0.94), rgba(255,248,251,0.94)) padding-box,
     linear-gradient(135deg, var(--rose), var(--gold) 55%, var(--leaf-700)) border-box;
   transform: translateY(18px) scale(0.96);
   transition: transform 0.4s ease;
@@ -477,6 +481,24 @@ body { min-height: 100vh; position: relative; }
   line-height: 1.5;
 }
 
+/* Camada da explosão de corações — fica ACIMA do popup (z-index maior) */
+#celebration-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 25;
+  overflow: hidden;
+}
+
+/* ---------- Vídeo final ---------- */
+.final-video {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 18px;
+  border: 1px solid rgba(179,121,47,0.4);
+  box-shadow: 0 8px 26px rgba(74,16,48,0.16);
+}
+
 /* ---------- Setas de navegação livre ---------- */
 .nav-arrow {
   position: fixed;
@@ -485,8 +507,8 @@ body { min-height: 100vh; position: relative; }
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  border: 1px solid rgba(234,176,78,0.4);
-  background: rgba(28,15,22,0.55);
+  border: 1px solid rgba(179,121,47,0.4);
+  background: rgba(255,255,255,0.7);
   color: var(--gold);
   font-size: 1.3rem;
   line-height: 1;

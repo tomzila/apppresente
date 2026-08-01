@@ -14,6 +14,9 @@
 <!-- Camada de partículas (corações e folhas) -->
 <div id="particle-layer" aria-hidden="true"></div>
 
+<!-- Camada da explosão de corações comemorativa (fica ACIMA do popup) -->
+<div id="celebration-layer" aria-hidden="true"></div>
+
 <!-- Botão de música -->
 <button id="music-toggle" class="music-btn" aria-label="Tocar música">
   <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="18" cy="16" r="3" fill="currentColor"/></svg>
@@ -108,7 +111,7 @@
     <div class="center-content">
       <span class="eyebrow">mais uma coisinha</span>
       <h2 class="display-md">Adivinhe qual é o seu presente de aniversário</h2>
-      <img class="quiz-hint-img" src="assets/fotos/foto3.jpeg" alt="Dica do presente">
+      <img class="quiz-hint-img" src="assets/fotos/dica-presente.jpg" alt="Dica do presente">
       <div class="quiz-options" id="quiz-options"></div>
     </div>
 
@@ -120,10 +123,22 @@
     </div>
   </section>
 
+  <!-- TELA 8 — VÍDEO FINAL -->
+  <section class="screen" id="screen-video" data-particles="hearts">
+    <div class="center-content">
+      <span class="eyebrow">pra fechar com chave de ouro</span>
+      <h2 class="display-md">Um vídeo nosso</h2>
+      <video class="final-video" id="final-video" controls playsinline>
+        <source src="assets/video/final.mp4" type="video/mp4">
+        Seu navegador não suporta vídeo.
+      </video>
+    </div>
+  </section>
+
 </main>
 
-<!-- Navegação por pontos -->
-<nav id="dots" aria-hidden="true"></nav>
+<!-- Navegação por pontos (só aparece na última tela, junto com as setas) -->
+<nav id="dots" class="dots-hidden" aria-hidden="true"></nav>
 
 <!-- Setas de navegação livre (aparecem só depois de chegar na última tela) -->
 <button class="nav-arrow nav-arrow-left nav-arrow-hidden" id="nav-prev" aria-label="Tela anterior">‹</button>

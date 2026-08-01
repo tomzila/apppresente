@@ -75,7 +75,7 @@ function irParaTela(novoIndex) {
     updateParticlesForScreen(next);
     atualizarSetasNavegacao();
     if (next.id === "screen-gallery") iniciarGaleriaSeNecessario();
-    if (next.id === "screen-quiz") revelarNavegacaoLivre();
+    if (next.id === "screen-video") revelarNavegacaoLivre();
     setTimeout(() => {
       next.classList.remove("screen-entering");
       transitioning = false;
@@ -120,6 +120,7 @@ function revelarNavegacaoLivre() {
   navegacaoLivreLiberada = true;
   navPrevBtn.classList.remove("nav-arrow-hidden");
   navNextBtn.classList.remove("nav-arrow-hidden");
+  dotsNav.classList.remove("dots-hidden");
   atualizarSetasNavegacao();
 }
 
@@ -341,7 +342,7 @@ musicBtn.addEventListener("click", () => {
    no HTML de cada <section class="screen"> (deixe vazio pra
    desativar numa tela específica).
    ============================================================ */
-const HEART_SVG = `<svg viewBox="0 0 32 29" width="22" height="20"><path fill="#f2668a" d="M16 29S0 18.5 0 8.7C0 3.9 3.9 0 8.7 0c3 0 5.7 1.5 7.3 3.9C17.6 1.5 20.3 0 23.3 0 28.1 0 32 3.9 32 8.7 32 18.5 16 29 16 29z"/></svg>`;
+const HEART_SVG = `<svg viewBox="0 0 32 29" width="22" height="20"><path fill="#ec4899" d="M16 29S0 18.5 0 8.7C0 3.9 3.9 0 8.7 0c3 0 5.7 1.5 7.3 3.9C17.6 1.5 20.3 0 23.3 0 28.1 0 32 3.9 32 8.7 32 18.5 16 29 16 29z"/></svg>`;
 
 const particleLayer = document.getElementById("particle-layer");
 let activeTypes = { hearts: false };
@@ -386,7 +387,10 @@ const quizOptionsEl = document.getElementById("quiz-options");
 const quizPopup = document.getElementById("quiz-popup");
 const quizPopupText = document.getElementById("quiz-popup-text");
 const quizPopupClose = document.getElementById("quiz-popup-close");
+const celebrationLayer = document.getElementById("celebration-layer");
+const TEMPO_COMEMORACAO = 3400; // quanto tempo os corações comemoram antes de ir pro vídeo (ms)
 let quizJaAcertou = false;
+let avancouParaVideo = false;
 
 QUIZ_OPCOES.forEach((opcao, i) => {
   const btn = document.createElement("button");
@@ -405,11 +409,56 @@ function responderQuiz(correta, btnClicado) {
     : "Não foi dessa vez 😅 tenta de novo!";
   quizJaAcertou = correta;
   quizPopup.classList.add("visible");
+
+  if (correta) {
+    explodirCoracoesComemoracao();
+    setTimeout(irParaTelaDoVideo, TEMPO_COMEMORACAO);
+  }
+}
+
+// Sobe uma leva de corações comemorando, por cima de tudo (inclusive do popup).
+function explodirCoracoesComemoracao() {
+  const QUANTIDADE = 24;
+  for (let i = 0; i < QUANTIDADE; i++) {
+    setTimeout(() => {
+      const el = document.createElement("div");
+      el.className = "particle heart";
+      el.innerHTML = HEART_SVG;
+
+      const left = Math.random() * 100;
+      const size = 0.6 + Math.random() * 0.9;
+      const duration = 2 + Math.random() * 1.6;
+      const drift = (Math.random() * 140 - 70) + "px";
+
+      el.style.left = left + "vw";
+      el.style.bottom = "-40px";
+      el.style.transform = `scale(${size})`;
+      el.style.setProperty("--drift", drift);
+      el.style.animationDuration = duration + "s";
+      el.style.animationTimingFunction = "ease-out";
+      el.style.animationFillMode = "forwards";
+
+      celebrationLayer.appendChild(el);
+      el.addEventListener("animationend", () => el.remove());
+    }, i * 90);
+  }
+}
+
+// Fecha o popup e avança pra tela do vídeo — só executa uma vez,
+// seja pelo timer automático ou por ela clicar em "fechar" antes.
+function irParaTelaDoVideo() {
+  if (avancouParaVideo) return;
+  avancouParaVideo = true;
+  quizPopup.classList.remove("visible");
+  irParaTela(currentIndex + 1);
 }
 
 quizPopupClose.addEventListener("click", () => {
+  if (quizJaAcertou) {
+    irParaTelaDoVideo(); // ela quis pular a espera e ir direto pro vídeo
+    return;
+  }
   quizPopup.classList.remove("visible");
-  if (quizJaAcertou) return; // já acertou, deixa como está
   document.querySelectorAll(".quiz-option").forEach(b => {
     b.disabled = false;
     b.classList.remove("quiz-option-errada");

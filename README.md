@@ -17,6 +17,7 @@ assets/audio/  → coloque aqui o mp3 da música
 - **Fotos**: array `FOTOS` no topo do `script.js`. Veja a seção "Como adicionar as fotos" logo abaixo, com o passo a passo completo.
 - **Música**: salve o arquivo mp3 (que você já possua legalmente) como `assets/audio/eu-te-devoro.mp3`, ou troque o `src` da tag `<audio>` no `index.html` pelo nome do seu arquivo. Não incluí o áudio em si — direitos autorais não permitem eu baixar/gerar isso por você.
 - **Quiz "adivinhe o presente"**: array `QUIZ_OPCOES`. Cada opção tem um `texto` e `correta: true/false` — só uma pode ser `true`. Pode mudar os textos, a ordem, ou até adicionar/remover opções (o site atualiza as letras A, B, C... sozinho). A imagem de dica é o arquivo `assets/fotos/dica-presente.jpg` — troque por uma foto sua (mesma lógica da seção "Como adicionar as fotos", só que essa é só uma imagem, não um array).
+- **Vídeo final**: salve o arquivo de vídeo (formato `.mp4`, que costuma ser o mais compatível) como `assets/video/final.mp4`. Se quiser usar outro nome, troque o `src="assets/video/final.mp4"` no `index.html` (procure por `<video class="final-video"`). Vídeos pesam bastante — se o seu tiver mais de uns 30-50MB, considere comprimir antes (o [HandBrake](https://handbrake.fr) é gratuito e faz isso bem) pra não demorar muito pra carregar.
 
 ## Corações por tela
 
@@ -91,42 +92,85 @@ Abra o `index.html` direto no navegador (duplo clique) — já funciona, é tudo
 
 ---
 
-# Guia de personalização visual
+# Guia de cores — como mudar tudo que aparece na tela
 
-Tudo que é visual mora no `style.css`. Você não precisa entender CSS a fundo pra mexer aqui — é achar a linha certa e trocar o valor.
+Tudo que é cor mora no `style.css`. A imensa maioria é controlada por **variáveis** — nomes que começam com `--`, definidos uma vez no topo do arquivo e reaproveitados em todo o resto. Então, na maior parte das vezes, você muda a cor **uma única vez** lá em cima, e ela atualiza em todo o site sozinha.
 
-## 1. Cores
+## 1. As variáveis principais (onde 90% das cores vêm daqui)
 
-Lá no **topo do `style.css`**, primeiras linhas, tem isso:
+Bem no **topo do `style.css`**, primeiras linhas:
 
 ```css
 :root {
-  --wine-950: #1a0a15;   /* fundo mais escuro (cantos) */
-  --wine-900: #33122a;   /* fundo principal (vinho/roxo) */
-  --wine-800: #4a1936;   /* variação de fundo */
-  --leaf-900: #1c3324;   /* verde escuro (moldura) */
-  --leaf-700: #2f9c56;   /* verde vivo (moldura) */
-  --gold: #eab04e;       /* dourado — botões, detalhes */
-  --cream: #f9ecda;      /* cor do texto principal */
-  --rose: #f2668a;       /* rosa — destaques, corações */
+  --bg-1: #fdf1f6;       /* fundo — tom mais claro (bordas do gradiente) */
+  --bg-2: #f9d7e7;       /* fundo — tom principal, rosa suave */
+  --rose: #ec4899;       /* rosa vivo — bordas, botões, corações, detalhes */
+  --rose-deep: #c2185b;  /* rosa escuro — usado em texto, pra garantir leitura */
+  --gold: #b3792f;       /* dourado (rosé gold) — acento secundário */
+  --text-main: #4a1030;  /* cor principal do texto */
+  --leaf-700: #2f9c56;   /* verde — só aparece na resposta certa do quiz */
 }
 ```
 
-Essas são **variáveis**: o nome depois de `--` é usado em todo o resto do arquivo (procure por `var(--gold)`, por exemplo). Ou seja, **muda a cor uma vez aqui em cima e ela muda no site inteiro**, em vez de precisar caçar cada lugar que usa aquela cor.
+O que cada uma controla, na prática:
 
-Pra trocar uma cor: troca só o valor hexadecimal (o `#xxxxxx`) por outro. Sugestão de ferramenta pra escolher/gerar códigos de cor: [coolors.co](https://coolors.co) ou o seletor de cor do Google (busque "color picker" no Google).
+| Variável | Onde aparece |
+|---|---|
+| `--bg-1` / `--bg-2` | Fundo geral de todas as telas (gradiente claro) |
+| `--rose` | Bordas dos cards, corações (fundo e do card), moldura, foco do teclado, opção errada do quiz |
+| `--rose-deep` | Textos em rosa: "um enigma antes de entrar", a dica, a mensagem de erro da senha |
+| `--gold` | Botões ("continuar", "abrir"), números do contador, pontinhos de navegação, ícone de música, letrinhas A/B/C/D do quiz |
+| `--text-main` | Cor do texto principal (títulos, mensagens, parágrafos) |
+| `--leaf-700` | Só a opção certa do quiz (verde = acertou) |
 
-> Atenção: em alguns lugares específicos do CSS (bordas de card, sombra) usei a mesma cor mas no formato `rgba(242,102,138,0.4)` em vez de `var(--rose)`, porque precisava controlar a transparência. Se quiser trocar essas também, procure por `rgba(` no arquivo e ajusta os três primeiros números (que são a versão em RGB da cor).
+**Pra trocar:** troca só o valor hexadecimal (o `#xxxxxx`) por outro. Ferramentas pra escolher cores: [coolors.co](https://coolors.co) (gera paletas prontas) ou busque "color picker" no Google.
 
-## 2. Fontes
+Como sua namorada gosta de rosa, deixei o site inteiro girando em torno do `--rose`/`--rose-deep` (rosa vivo e rosa escuro) com `--gold` como segundo tom (um "rosé gold", combina bem). Se quiser um rosa diferente (mais lilás, mais pêssego, mais vermelho...), troca só o `--rose` e o `--rose-deep` — o site inteiro acompanha.
 
-As fontes são carregadas lá no **`index.html`**, dentro do `<head>`:
+## 2. Cores que NÃO estão nas variáveis (usam `rgba` direto)
+
+Algumas bordas, sombras e fundos translúcidos precisam de controle de transparência, então usam `rgba(R,G,B,A)` direto em vez da variável — os três primeiros números são a cor (em RGB) e o último é a transparência (0 = invisível, 1 = opaco). Se quiser mudar essas também, é só trocar os 3 primeiros números. Pra te ajudar a achar cada uma no arquivo, aqui está o mapa (todas em `style.css`):
+
+- `rgba(236,72,153, ...)` → é o `--rose` em formato RGB. Aparece no fundo/borda da dica da senha, brilho de canto do fundo geral, opção errada do quiz.
+- `rgba(179,121,47, ...)` → é o `--gold` em RGB. Aparece nas bordas do contador, galeria, botão de música, setas de navegação, opções do quiz.
+- `rgba(74,16,48, ...)` → é o `--text-main` em RGB. Aparece na borda do campo de senha, no fundo do popup do quiz, na sombra por trás dos cards.
+- `rgba(194,24,91, ...)` → é o `--rose-deep` em RGB. Aparece nos pontinhos de navegação (inativos) e na sombra do card do enigma.
+- `rgba(47,156,86, ...)` → é o `--leaf-700` (verde) em RGB. Só aparece na opção certa do quiz.
+- `rgba(255,248,251, ...)` e `rgba(255,255,255, ...)` → são tons de branco/quase-branco, usados como fundo dos cards, inputs e botões translúcidos (pra ficarem "flutuando" sobre o fundo rosa).
+
+Se você mudar `--rose` no topo do arquivo, essas versões em `rgba(236,72,153...)` **não mudam sozinhas** (são números fixos, não variáveis) — só editando manualmente cada uma. É mais trabalho, mas te dá controle fino sobre a transparência de cada elemento.
+
+## 3. Cores "escondidas" fora do `:root` (SVG dos corações e fundo)
+
+Duas coisas de cor não usam variável porque são desenhos (SVG) embutidos direto no código:
+
+- **Coração que flutua no fundo**: no `script.js`, procure por `const HEART_SVG` — tem um `fill="#ec4899"` dentro do código do desenho. Troque esse hexadecimal.
+- **Corações dentro do card do enigma**: no `style.css`, procure por `.card-heart` — tem dois desenhos parecidos, um com `fill='%23ec4899'` (rosa) e outro com `fill='%23b3792f'` (dourado) — repare que aqui o `#` vira `%23` (é assim que se escreve dentro de uma URL). Troque os hexadecimais do mesmo jeito, só lembrando de manter o `%23` no lugar do `#`.
+
+## 4. Fundo (background)
+
+O fundo geral do site está no `style.css`, dentro de `html, body`:
+
+```css
+background:
+  radial-gradient(ellipse at 15% 0%, rgba(236,72,153,0.14), transparent 55%),
+  radial-gradient(ellipse at 85% 100%, rgba(179,121,47,0.12), transparent 55%),
+  radial-gradient(ellipse at top, var(--bg-2), var(--bg-1) 70%);
+```
+
+São 3 camadas: dois brilhos suaves nos cantos (rosa e dourado) por cima de um gradiente base claro (`--bg-2` no meio, `--bg-1` nas bordas). Pra deixar mais simples, pode apagar as duas primeiras linhas e deixar só a última. Pra deixar ainda mais claro, aumenta os valores de `--bg-1`/`--bg-2` (aproxima de `#ffffff`); pra deixar mais forte, escurece um pouco.
+
+O fundo do **card do enigma** (com os corações flutuando por cima) está na regra `.gate-card` — o `background:` dele tem duas partes: a primeira (`rgba(255,248,251,0.88)`) é o preenchimento claro de dentro do card, e a segunda (`linear-gradient(135deg, var(--rose), var(--gold) 55%, var(--leaf-700))`) é a moldura colorida em volta — veja a seção 6.
+
+## 5. Fontes
+
+As fontes são carregadas no **`index.html`**, dentro do `<head>`:
 
 ```html
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 ```
 
-E usadas no `style.css` (bem no topo, dentro do `:root`):
+E usadas no `style.css` (dentro do `:root`):
 
 ```css
 --font-display: 'Cormorant Garamond', serif;   /* títulos elegantes */
@@ -134,44 +178,36 @@ E usadas no `style.css` (bem no topo, dentro do `:root`):
 ```
 
 **Pra trocar uma fonte:**
-1. Vá em [fonts.google.com](https://fonts.google.com) — é grátis e tem milhares de opções.
-2. Escolha uma fonte, clique nela, e clique em **"Get font"** → **"Get embed code"**.
-3. Ele te dá um link parecido com o que já está no seu `index.html` — copia e substitui a linha `<link href="https://fonts.googleapis.com/css2?family=...">` pela nova.
-4. Troca o nome da fonte dentro das aspas em `--font-display` ou `--font-body` no `style.css` pelo nome exato que aparece no Google Fonts (tem que bater certinho, incluindo maiúsculas).
+1. Vá em [fonts.google.com](https://fonts.google.com) — grátis, milhares de opções.
+2. Escolha uma fonte, clique nela, depois em **"Get font"** → **"Get embed code"**.
+3. Copia o link que ele te dá e substitui a linha `<link href="https://fonts.googleapis.com/css2?family=...">` no `index.html`.
+4. Troca o nome da fonte dentro das aspas em `--font-display` ou `--font-body`, no `style.css`, pelo nome exato do Google Fonts (maiúsculas incluídas).
 
-Fontes parecidas com o estilo atual (elegante/romântico), se quiser trocar por algo parecido: *Playfair Display*, *Marcellus*, *EB Garamond* (pro `--font-display`); *Poppins*, *Manrope*, *Nunito Sans* (pro `--font-body`).
+Sugestões parecidas com o estilo atual: *Playfair Display*, *Marcellus*, *EB Garamond* (pro `--font-display`); *Poppins*, *Manrope*, *Nunito Sans* (pro `--font-body`).
 
-## 3. Fundo (background)
+## 6. Molduras (bordas dos cards)
 
-O fundo geral do site está no `style.css`, dentro de `html, body`:
-
-```css
-background:
-  radial-gradient(ellipse at 15% 0%, rgba(242,102,138,0.16), transparent 55%),
-  radial-gradient(ellipse at 85% 100%, rgba(47,156,86,0.12), transparent 55%),
-  radial-gradient(ellipse at top, var(--wine-900), var(--wine-950) 70%);
-```
-
-São 3 camadas de gradiente sobrepostas (os brilhos coloridos nos cantos + o fundo base). Pra deixar mais simples, pode apagar as duas primeiras linhas e deixar só a última. Pra mudar a cor de algum brilho, troca o `rgba(...)` daquela linha.
-
-O fundo do **card do enigma** (com os corações espalhados) está na regra `.gate-card` e `.gate-card::before` — procure por esses nomes no arquivo. Lá dentro, `background-position` controla onde cada coração fica (em % da largura/altura do card) e `background-size` controla o tamanho de cada um.
-
-## 4. Efeitos (animações, corações flutuando)
-
-- **Velocidade dos corações flutuando (fundo geral)**: no `script.js`, procure por `const duration = 16 + Math.random() * 10;` — esse `16` é a duração mínima em segundos e o `10` é a variação extra aleatória. Aumenta os números pra ficar mais lento, diminui pra ficar mais rápido.
-- **Velocidade dos corações do card do enigma**: no `style.css`, procure pelas 6 linhas `.card-heart.h1` até `.card-heart.h6`. Cada uma tem um `animation-duration` (em segundos) — esse é o tempo que o coração leva pra fazer um ciclo completo de subir e descer. **Número menor = mais rápido. Número maior = mais lento.** Deixei todos entre 2.6s e 3.7s agora (mais animado que antes). Pra ajustar de novo, é só mudar esses valores.
-- **Quantidade de corações na tela**: procure por `setInterval(spawnParticle, 900)` — esse `900` é o intervalo em milissegundos entre um coração e outro. Número menor = mais corações; maior = menos.
-- **Animação de virar página**: no `style.css`, procure por `@keyframes pageOut` e `@keyframes pageIn` — controlam o efeito de transição entre telas.
-- **Velocidade da galeria de fotos**: no `style.css`, procure por `.gallery-track` e o `animation: galleryScroll 26s linear infinite;` — o `26s` é o tempo pra faixa completar uma volta inteira. Número menor = mais rápido. Se colocar muitas fotos, pode valer aumentar esse tempo pra não ficar corrido demais. Passar o mouse por cima da galeria pausa a rolagem automaticamente.
-
-## 5. Moldura do card (borda)
-
-A borda em gradiente do card do enigma está em `.gate-card`, na linha:
+A borda em gradiente do card do enigma e do popup do quiz usa a mesma lógica, por exemplo em `.gate-card`:
 
 ```css
 background:
-  linear-gradient(rgba(26,10,21,0.86), rgba(26,10,21,0.86)) padding-box,
+  linear-gradient(rgba(255,248,251,0.88), rgba(255,248,251,0.88)) padding-box,
   linear-gradient(135deg, var(--rose), var(--gold) 55%, var(--leaf-700)) border-box;
 ```
 
-A segunda linha (`linear-gradient(135deg, ...)`) é a moldura — troca as cores ali (pode usar as variáveis `var(--rose)`, `var(--gold)`, etc, ou hexadecimais direto) ou muda o ângulo (`135deg`) pra girar a direção do gradiente. O `border-radius: 22px;` logo abaixo controla o quão arredondado é o canto do card — número maior = mais arredondado.
+A segunda linha é a moldura em si — troca as cores (`var(--rose)`, `var(--gold)`, `var(--leaf-700)`, ou hexadecimais direto) ou o ângulo (`135deg`) pra girar a direção do gradiente. `border-radius: 22px;` logo abaixo controla o quão arredondado é o canto — número maior = mais arredondado.
+
+## 7. Efeitos e animações
+
+- **Velocidade dos corações flutuando no fundo geral**: no `script.js`, procure por `const duration = 16 + Math.random() * 10;`. O `16` é a duração mínima (segundos), o `10` é a variação aleatória extra. Aumenta pra mais lento, diminui pra mais rápido.
+- **Velocidade dos corações do card do enigma**: no `style.css`, procure pelas linhas `.card-heart.h1` até `.card-heart.h6` — cada uma tem um `animation-duration`. Número menor = mais rápido.
+- **Quantidade de corações no fundo**: `setInterval(spawnParticle, 900)` no `script.js` — `900` é o intervalo em milissegundos entre um coração e outro.
+- **Animação de virar página** (troca de tela): `@keyframes pageOut` e `@keyframes pageIn` no `style.css`.
+- **Velocidade do slideshow de fotos**: no `script.js`, procure por `TEMPO_PAUSA_FOTO` (quanto tempo cada foto fica parada) e `DURACAO_TRANSICAO_FOTO` (duração da entrada/saída).
+
+## Resumo rápido: "quero mudar só UMA cor"
+
+- **Rosa do site inteiro** → troca `--rose` e `--rose-deep` no topo do `style.css` (e, se quiser ser bem minucioso, os `rgba(236,72,153...)` espalhados pelo arquivo).
+- **Dourado** → troca `--gold` (e os `rgba(179,121,47...)`).
+- **Fundo geral** → `--bg-1` e `--bg-2`.
+- **Cor do texto** → `--text-main`.
