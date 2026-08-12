@@ -6,15 +6,15 @@
 const SENHA_CORRETA = "victoria";
 
 // Dica exibida se ela errar a resposta (edite à vontade).
-const DICA_SENHA = "dica: é o nome dela ;)";
+const DICA_SENHA = "to olhando pra ela com cara de apaixonado <3";
 
 // Mensagens progressivas — adicione, remova ou reordene à vontade.
 const MENSAGENS = [
-  "Cada dia ao seu lado é um presente que eu não sabia que merecia.",
-  "Você trouxe leveza pra minha vida de um jeito que eu nem sabia que precisava.",
-  "Quando eu penso no nosso futuro, a única certeza é que quero você nele.",
-  "Obrigado por ser exatamente quem você é, comigo e com o mundo.",
-  "Feliz aniversário, Victória. Que esse novo ano seja tão bonito quanto você."
+  "Você é INCRÍVEL princesa.",
+  "Amo cada detalhe seu <3. admiro muito sua intensidade de viver a vida!",
+  "Eu tenho certeza que você realizará todos os seus sonhos, você é FODA amor.",
+  "Sou muito feliz em compartilhar minha vida com você, dona do meu pensamento!.",
+  "Feliz aniversário minha princesa, Feliz novo ciclo! conte comigo para tudo amor, qualquer coisa mesmo, estou aqui!."
 ];
 
 // Início do namoro (usado no contador de tempo).
@@ -22,20 +22,22 @@ const INICIO_NAMORO = new Date(2026, 0, 11, 11, 0, 0); // 11/01/2026 às 11:00
 
 // Fotos da galeria — coloque os arquivos em assets/fotos/ e liste os nomes aqui.
 const FOTOS = [
-  "assets/fotos/fotominha.jpeg",
-  "assets/fotos/foto2.jpeg",
-  "assets/fotos/foto3.jpeg",
-  "assets/fotos/foto4.jpeg",
-  "assets/fotos/foto5.jpeg",
+  "assets/videos/f1.jpeg",
+  "assets/videos/f2.jpeg",
+  "assets/videos/f3.jpeg",
+  "assets/videos/f4.jpeg",
+  "assets/videos/f5.jpeg",
+  "assets/videos/f6.jpeg",
+  "assets/videos/f7.jpeg",
 ];
 
 // Opções do quiz "adivinhe o presente" — pode trocar os textos à vontade,
 // a resposta certa é sempre a que tiver "correta: true" (hoje é a opção B).
 const QUIZ_OPCOES = [
-  { texto: "Tênis", correta: false },
-  { texto: "Caneta", correta: true },
-  { texto: "Garrafa", correta: false },
-  { texto: "Everson Zoio", correta: false }
+  { texto: "Jatinho particular", correta: false },
+  { texto: "Garrafa academia", correta: true },
+  { texto: "Meu cool", correta: false },
+  { texto: "Eu", correta: false }
 ];
 
 /* ============================================================
@@ -444,29 +446,3 @@ function explodirCoracoesComemoracao() {
   }
 }
 
-// Fecha o popup e avança pra tela do vídeo — só executa uma vez,
-// seja pelo timer automático ou por ela clicar em "fechar" antes.
-function irParaTelaDoVideo() {
-  if (avancouParaVideo) return;
-  avancouParaVideo = true;
-  quizPopup.classList.remove("visible");
-  irParaTela(currentIndex + 1);
-}
-
-quizPopupClose.addEventListener("click", () => {
-  if (quizJaAcertou) {
-    irParaTelaDoVideo(); // ela quis pular a espera e ir direto pro vídeo
-    return;
-  }
-  quizPopup.classList.remove("visible");
-  document.querySelectorAll(".quiz-option").forEach(b => {
-    b.disabled = false;
-    b.classList.remove("quiz-option-errada");
-  });
-});
-
-/* ============================================================
-   INÍCIO
-   ============================================================ */
-showScreen(0);
-document.getElementById("gate-input").focus();
