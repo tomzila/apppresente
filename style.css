@@ -490,15 +490,6 @@ body { min-height: 100vh; position: relative; }
   overflow: hidden;
 }
 
-/* ---------- Vídeo final ---------- */
-.final-video {
-  width: 100%;
-  max-width: 480px;
-  border-radius: 18px;
-  border: 1px solid rgba(179,121,47,0.4);
-  box-shadow: 0 8px 26px rgba(74,16,48,0.16);
-}
-
 /* ---------- Setas de navegação livre ---------- */
 .nav-arrow {
   position: fixed;

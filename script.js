@@ -11,7 +11,7 @@ const DICA_SENHA = "to olhando pra ela com cara de apaixonado <3";
 // Mensagens progressivas — adicione, remova ou reordene à vontade.
 const MENSAGENS = [
   "Você é INCRÍVEL princesa.",
-  "Amo cada detalhe seu <3. admiro muito sua intensidade de viver a vida!",
+  "Amo cada detalhe seu <3. admiro muito sua personalidade e sua intensidade em viver a vida!",
   "Eu tenho certeza que você realizará todos os seus sonhos, você é FODA amor.",
   "Sou muito feliz em compartilhar minha vida com você, dona do meu pensamento!.",
   "Feliz aniversário minha princesa, Feliz novo ciclo! conte comigo para tudo amor, qualquer coisa mesmo, estou aqui!."
@@ -77,7 +77,7 @@ function irParaTela(novoIndex) {
     updateParticlesForScreen(next);
     atualizarSetasNavegacao();
     if (next.id === "screen-gallery") iniciarGaleriaSeNecessario();
-    if (next.id === "screen-video") revelarNavegacaoLivre();
+    if (next.id === "screen-quiz") revelarNavegacaoLivre();
     setTimeout(() => {
       next.classList.remove("screen-entering");
       transitioning = false;
@@ -383,6 +383,7 @@ spawnTimer = setInterval(spawnParticle, 900);
 
 /* ============================================================
    TELA 7 — QUIZ "ADIVINHE O PRESENTE"
+   (agora é a última tela — sem tela de vídeo depois)
    ============================================================ */
 const LETRAS_QUIZ = ["A", "B", "C", "D", "E", "F"];
 const quizOptionsEl = document.getElementById("quiz-options");
@@ -390,9 +391,7 @@ const quizPopup = document.getElementById("quiz-popup");
 const quizPopupText = document.getElementById("quiz-popup-text");
 const quizPopupClose = document.getElementById("quiz-popup-close");
 const celebrationLayer = document.getElementById("celebration-layer");
-const TEMPO_COMEMORACAO = 3400; // quanto tempo os corações comemoram antes de ir pro vídeo (ms)
 let quizJaAcertou = false;
-let avancouParaVideo = false;
 
 QUIZ_OPCOES.forEach((opcao, i) => {
   const btn = document.createElement("button");
@@ -412,10 +411,7 @@ function responderQuiz(correta, btnClicado) {
   quizJaAcertou = correta;
   quizPopup.classList.add("visible");
 
-  if (correta) {
-    explodirCoracoesComemoracao();
-    setTimeout(irParaTelaDoVideo, TEMPO_COMEMORACAO);
-  }
+  if (correta) explodirCoracoesComemoracao();
 }
 
 // Sobe uma leva de corações comemorando, por cima de tudo (inclusive do popup).
@@ -446,3 +442,17 @@ function explodirCoracoesComemoracao() {
   }
 }
 
+quizPopupClose.addEventListener("click", () => {
+  quizPopup.classList.remove("visible");
+  if (quizJaAcertou) return; // já acertou, deixa como está
+  document.querySelectorAll(".quiz-option").forEach(b => {
+    b.disabled = false;
+    b.classList.remove("quiz-option-errada");
+  });
+});
+
+/* ============================================================
+   INÍCIO
+   ============================================================ */
+showScreen(0);
+document.getElementById("gate-input").focus();
